@@ -1,19 +1,30 @@
+import java.sql.SQLOutput;
 import java.util.Scanner;
-
+import java.util.*;
 public class CompteBancari {
     Scanner teclat = new Scanner(System.in);
-    private String iban, titular;
+    private String iban = "a", titular;
     private double saldo;
-
+    private ArrayList <String> arraylist = new ArrayList<>();
+    private final int minim = -50;
+    private final int acienda = 3000;
     public CompteBancari() {
     }
 
     public void omplir() {
-        System.out.println("Introdueix IBAN");
-        String ibantemp = teclat.nextLine();
-        if (comproIban(ibantemp)) {
-            this.iban = ibantemp;
+        while (comproIban(this.iban) != true) {
+            System.out.println("Introdueix IBAN");
+            String ibantemp = teclat.nextLine();
+            if (comproIban(ibantemp)) {
+                this.iban = ibantemp;
+            } else {
+                System.err.println("IBAN erroneo");
+            }
         }
+        System.out.println("Introduce nombre y apellidos");
+        this.titular = teclat.nextLine();
+        System.out.println("Quantitat de dines en el compte");
+        this.saldo = teclat.nextDouble();
     }
 
     public String getIban() {
@@ -56,10 +67,52 @@ public class CompteBancari {
         System.out.println("El saldo es: " + this.saldo);
     }
 
-    public boolean ingreso() {
-        boolean ñarlos = true;
+    public void ingreso() {
+        double cant;
+        String save;
         System.out.println("Selecciona la cantidad a ingresar");
-        return ñarlos;
+        cant = teclat.nextDouble();
+        if (cant > 0){
+            this.saldo += cant;
+            save = "+" + cant;
+            arraylist.add(save);
+        } else {
+            System.err.println("Error en el ingreso");
+        }
+        if(cant >= 3000){
+            System.err.println("SE AVISARA A ACIENDA");
+        }
+        if(arraylist.size() > 100){
+            arraylist.remove(0);
+        }
+    }
+    public void retirada(){
+        double cant;
+        String save;
+        System.out.println("Selecciona la cantidad a retirar");
+        cant = teclat.nextDouble();
+        if(( this.saldo - cant) < minim){
+            System.err.println("No ha sido posible realizar la operación");
+        } else if(this.saldo - cant < 0 &&  this.saldo -cant > minim){
+            System.out.println("Realizando operacion");
+            System.err.println("Aviso \"estas en numeros rojos\" ");
+            this.saldo -=cant;
+            save = "-"+cant;
+            arraylist.add(save);
+        } else if(this.saldo -cant > 0){
+            System.out.println("Realizando operacion");
+            this.saldo -=cant;
+            save = "-"+cant;
+            arraylist.add(save);
+        }
+        if(arraylist.size() > 100){
+            arraylist.remove(0);
+        }
+    }
+    public void recorrearray(){
+        for(String i: arraylist){
+            System.out.println(i);
+        }
     }
 
     private boolean comproIban(String a) {

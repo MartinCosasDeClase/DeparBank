@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.*;
 public class CompteBancari {
@@ -118,6 +117,7 @@ public class CompteBancari {
     private boolean comproIban(String a) {
         boolean comprobar = false;
         int let = 0, num = 0;
+        a = a.toUpperCase();
         char[] compro = a.toCharArray();
         for (int i : compro) {
             if (let != 2) {
